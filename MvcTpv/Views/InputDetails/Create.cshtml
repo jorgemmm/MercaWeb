@@ -1,0 +1,68 @@
+﻿@model MvcTpv.Models.InputDetail
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@*<h2>Create</h2>*@
+<h2>Crear</h2>
+
+<h4>Detalle de Ingreso</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                @*  @si (rol trabajador) -->*@
+                <label asp-for="InputID" class="control-label">ID Ingreso:</label>
+                <label class="control-label">&nbsp;@Model.InputID</label>  
+                @*<div><p> @Model.InputID</p></div>*@
+                <input asp-for="InputID" type="hidden" value="@Model.InputID" />
+
+                <br />
+                <label class="control-label">Comprobante: </label>
+               
+                @*<label asp-for="InputID" class="form-control" >@Model.InputID </label>*@
+
+                <div><p> @Model.Input.Tipo_Comprobante&nbsp;@Model.Input.serie_comprobante&nbsp;@Model.Input.num_comprobante</p></div>
+                        
+
+                @*  @si (rol administrator o else) --> <select asp-for="InputID" class ="form-control" asp-items="ViewBag.InputID"></select>*@
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Cantidad" class="control-label"></label>
+                <input asp-for="Cantidad" class="form-control" />
+                <span asp-validation-for="Cantidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PNETO" class="control-label"></label>
+                <input asp-for="PNETO" class="form-control" />
+                <span asp-validation-for="PNETO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PVP" class="control-label"></label>
+                <input asp-for="PVP" class="form-control" />
+                <span asp-validation-for="PVP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductID" class="control-label">ID Producto</label>
+                <select asp-for="ProductID" class ="form-control" asp-items="ViewBag.ProductID"></select>
+            </div>
+          
+            <div class="form-group">
+                <input type="submit" value="Create"  class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+     <a asp-controller="inputs" asp-action="Index" asp-route-id="@Model.InputID" class="btn btn-default">Volver a listado de Entradas</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

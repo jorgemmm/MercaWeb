@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MvcTpv.Models.InputDetail>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Listado Completo de Detalles</h2>
+
+   @* <p>
+    <a asp-action="Create" class="btn btn-success">Crear nuevo</a>
+    </p>
+ <form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index" class="btn btn-primary">Back to Full List</a>
+        </p>
+    </div>
+</form>*@
+
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cantidad)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PNETO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PVP)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Input)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PNETO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PVP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Input.InputID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Description)
+            </td>
+            <td style="width:30%">
+                <a asp-action="Edit" asp-route-id="@item.InputDetailID"    class="btn btn-warning"   >Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.InputDetailID" class="btn btn-info" >Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.InputDetailID"  class="btn btn-danger"  >Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

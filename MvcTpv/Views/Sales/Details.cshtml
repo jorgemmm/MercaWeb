@@ -1,0 +1,109 @@
+﻿@model MvcTpv.Models.Sale
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div  >
+    <h4>Sale</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Hora)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Hora)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo_Comprobante)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tipo_Comprobante)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Serie_comprobante)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Serie_comprobante)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Num_comprobante)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Num_comprobante)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalSale)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalSale)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Impuesto)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Impuesto)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Customer.FirstMidName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SaleMan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SaleMan.FirstMidName)
+        </dd>
+    </dl>
+</div>
+
+   
+
+
+<div  id="botones">
+    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-warning"  >Edit</a> |
+    <a  asp-action="Index"  class="btn btn-default" >Back to List</a>
+
+  
+   <a class="btn btn-danger"  id="hide"> ocultar Imprimir  </a>
+  
+    
+    
+  
+   
+</div>
+
+<div id="prt"  >
+    <button type="button" id="bt_add" class="btn btn-primary">Imprimir</button>
+   
+</div>
+
+
+@section JavaScript{
+
+    <script type="text/javascript" src="~/js/addToPrint.js"></script>
+
+}
+
+
+
+
+
+
+
+
+@*Imprimir()
+    var winprint = window.open("@Url.Action("Details","Sales")", "_blank", "menubar=no, toolbar=no, resizable=no, top=100, left=200, width=500, height=500");
+    winprint.focus();
+    winprint.print();
+    winprint.close();*@

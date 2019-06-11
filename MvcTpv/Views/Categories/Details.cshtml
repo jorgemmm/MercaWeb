@@ -1,0 +1,56 @@
+﻿@model MvcTpv.Models.Category
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Category</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Products)
+        </dt>
+        <dd>
+            <table class="table">
+            <tr>
+                <th>Nombre Producto</th>
+                <th>Descripción Producto</th>
+                <th>Stock</th>
+            </tr>
+
+            @foreach(var item in Model.Products){
+              <tr>
+                  <td>
+                       @Html.DisplayFor(modelItem =>item.ProductName)
+                  </td>
+                  <td>
+                       @Html.DisplayFor(modelItem =>item.Description)
+                  </td>
+                  <td>
+                      @Html.DisplayFor(modelItem => item.Stock)
+                  </td>
+              </tr>
+            }
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CategoryID" class="btn btn-warning" >Edit</a> |
+    <a asp-action="Index" class="btn btn-default">Back to List</a>
+</div>

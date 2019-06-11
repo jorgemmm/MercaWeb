@@ -1,0 +1,127 @@
+﻿@*@model IEnumerable<MvcTpv.Models.Category>*@
+@model MvcTpv.Models.TpvViewModel.CategoryIndexData   
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+  <!-- <h2>Index</h2> -->
+  <h2>  Categorias </h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nueva Categoria</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index" class="btn btn-primary">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>      <th>
+             <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]"> Orden de Creación </a>
+                    @*@Html.DisplayNameFor(model => model.CategoryID)*@
+                </th>
+                <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> Nombre de Categoria</a>
+                    @*@Html.DisplayNameFor(model => model.CategoryName)*@
+                </th>
+                <th style="width:40%">
+                    Descripcion
+                    @*@Html.DisplayNameFor(model => model.Description)*@
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Categories) {
+        string selectedRow = "";
+        if (item.CategoryID == (int?)ViewData["CategoryID"])
+        {
+            selectedRow = "success";
+        }
+       
+       <tr class="@selectedRow">
+            <td>
+                 @Html.DisplayFor(modelItem => item.CategoryID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td >
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+              @*<td style="width:250px">*@
+            <td style="width:30%">
+                 <a  asp-action="Index"    asp-route-id="@item.CategoryID" class="btn btn-primary" >Select</a> |   |
+                 <a asp-action="Edit" asp-route-id="@item.CategoryID"    class="btn btn-warning"   >   Edit</a> |
+                 <a asp-action="Details" asp-route-id="@item.CategoryID" class="btn btn-info"  >Details</a> |
+                 <a asp-action="Delete" asp-route-id="@item.CategoryID"  class="btn btn-danger"  >Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@if (Model.Products != null)
+{
+    <h3>Productos de la Categoria Seleccionada</h3>
+    //Taught by Selected Instructor
+    <table class="table">
+        <tr>
+           <th>Numero de Producto</th>
+            <th>Nombre de producto</th>
+            <th>Descripcion</th>
+            <th>Stock</th>
+            <th>Opciones</th>
+        </tr>
+
+        @foreach (var item in Model.Products)
+        {
+             @*string selectedRow = "";
+            if (item.ProductID == (int?)ViewData["ProductID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">*@ 
+              <tr>
+                <td>
+                     @*@Html.ActionLink("Select", "Index", new { ProductID = item.ProductID })*@ 
+                     @item.ProductID
+                </td>
+                <td>
+                  @item.ProductName
+                </td>
+                <td>
+                    @item.Description
+                </td>
+                <td>
+                   @item.Stock
+                </td>
+                @*<td>
+                    
+                
+                    @item.ImagePath
+                </td>*@
+               @* <td>
+
+                @string.Format("{0:c2}", item.PNETO) @string.Format("{0:c2}", item.PVP)
+            </td>*@
+               
+
+              <td style="width:20%">
+               
+                <a asp-controller="Products"  asp-action="Edit"     asp-route-id="@item.ProductID" class="btn btn-warning" >Edit</a> |
+                <a asp-controller="Products" asp-action="Details"  asp-route-id="@item.ProductID"  class="btn btn-info"    >Details</a> |
+                <a asp-controller="Products" asp-action="Delete"   asp-route-id="@item.ProductID"  class="btn btn-danger"  >Delete</a>
+             </td>
+
+            </tr>
+        }
+
+    </table>
+}

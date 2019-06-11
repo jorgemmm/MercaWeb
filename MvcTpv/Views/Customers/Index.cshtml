@@ -1,0 +1,179 @@
+﻿@*@model IEnumerable<MvcTpv.Models.Customer>*@
+
+@model MvcTpv.Models.TpvViewModel.CustomerIndexData
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- <h2>Index</h2> -->
+<h2>Clientes</h2>
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nuevo Cliente</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Buscar: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index" class="btn btn-primary">Regresar a la Lista Completa</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> Nombre de Proveedor</a>
+                    @*@Html.DisplayNameFor(model => model.FirstMidName)
+                     @Html.DisplayNameFor(model => model.LastName)
+                    *@
+                
+                
+                </th>
+               
+                <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]"> Fecha de alta </a>
+                  @*  @Html.DisplayNameFor(model => model.HighDate)*@
+                </th>
+                 <th>
+                    Email
+                    @*@Html.DisplayNameFor(model => model.Email)*@
+                </th>
+                <th>
+                    TipoDocumento
+                    @*@Html.DisplayNameFor(model => model.TipoDocumento)*@
+                </th>
+                <th>
+                    NumDocumento
+                    @*@Html.DisplayNameFor(model => model.NumDocumento)*@
+                </th>
+                <th>
+                    Direccion
+                    @*@Html.DisplayNameFor(model => model.Direccion)*@
+                </th>
+                <th>
+                    Telefono
+                    @*@Html.DisplayNameFor(model => model.Telefono)*@
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Customers) {
+        string selectedRow = "";
+        if (item.CustomerID == (int?)ViewData["CustomerID"])
+        {
+            selectedRow = "success";
+        }
+       
+       <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstMidName)
+                &nbsp;
+                 @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.HighDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                 <a  asp-action="Index"    asp-route-id="@item.CustomerID" class="btn btn-primary">Select</a> |   |
+                <a asp-action="Edit" asp-route-id="@item.CustomerID" class="btn btn-warning">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CustomerID" class="btn btn-info">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CustomerID" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@if (Model.Sales != null)
+{
+    <h3>Ventas asociadas al Cliente selecionado</h3>
+    //Taught by Selected Instructor
+    <table class="table">
+        <tr>
+            <th>Fecha</th>
+            <th>Tipo de Comprobante</th>
+            <th>Comprobante</th>
+            <th>IGIC</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Sales)
+        {
+             @*string selectedRow = "";
+            if (item.ProductID == (int?)ViewData["ProductID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">*@ 
+              <tr>
+                <td>
+                     @*@Html.ActionLink("Select", "Index", new { ProductID = item.ProductID })*@ 
+                 @item.Fecha_Hora
+                </td>
+                <td>
+                  @item.Tipo_Comprobante
+                </td>
+                <td>
+                     @item.Serie_comprobante &nbsp; @item.Num_comprobante
+                   
+                </td>
+                <td>
+                   @item.Impuesto
+                </td>
+                @*<td>
+                    
+                
+                    @item.ImagePath
+                   @string.Format("{0:c2}", item.PVP)
+                </td>*@
+               <td>
+                @{
+                    var total= 0.00m;
+                   foreach (var detalle in item.SaleDetails)
+                    {
+                        total += detalle.TotalParcial;
+                        item.TotalSale = item.TotalSale + detalle.TotalParcial; 
+                    }
+                    @string.Format("{0:c2}", item.TotalSale)
+                }
+               
+                
+            </td>
+               <td>
+                   @item.Estado
+               </td>
+
+              <td>
+               
+                <a asp-controller="Sales"  asp-action="Edit"     asp-route-id="@item.ID" class="btn btn-warning" >Edit</a> |
+                <a asp-controller="Sales" asp-action="Details"  asp-route-id="@item.ID"  class="btn btn-info">Details</a> |
+                <a asp-controller="Sales" asp-action="Delete"   asp-route-id="@item.ID"  class="btn btn-danger">Delete</a>
+             </td>
+
+            </tr>
+        }
+
+    </table>
+}
+

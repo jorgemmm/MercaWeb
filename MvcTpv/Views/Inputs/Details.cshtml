@@ -1,0 +1,79 @@
+﻿@model MvcTpv.Models.Input
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div  >
+    <h4>Input</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_hora)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_hora)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo_Comprobante)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tipo_Comprobante)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.serie_comprobante)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.serie_comprobante)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.num_comprobante)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.num_comprobante)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Impuesto)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Impuesto)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalInput)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalInput)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Provider)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Provider.FirstMidName)
+        </dd>
+    </dl>
+</div>
+<div >
+    <a asp-action="Edit" asp-route-id="@Model.InputID" class="btn btn-warning"   >Edit</a> |
+    <a asp-action="Index" class="btn btn-default"    >Ir a Listado de Entradas</a>
+
+    <button   id="printButton"> Imprimir  </button>
+
+</div>
+
+<p></p><p></p><p></p>
+<hr>
+<div>
+@*<a asp-controller="categories" asp-action="Index"  class="btn btn-primary" > Selecionar Listado de Categorías</a>|*@
+<a  asp-controller="Providers" asp-action="Index"  asp-route-id="@Model.ProviderID" class="btn btn-primary" >  Selecionar Listado de Proveedores</a>
+</div>
+
+
+@section JavaScript{
+
+    <script type="text/javascript" src="~/js/addToPrint.js"></script>
+
+}
+
+</script>

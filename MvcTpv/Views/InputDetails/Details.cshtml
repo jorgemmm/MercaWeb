@@ -1,0 +1,49 @@
+﻿@model MvcTpv.Models.InputDetail
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>InputDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cantidad)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PNETO)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PNETO)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PVP)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PVP)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Input)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Input.InputID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Description)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.InputDetailID" class="btn btn-warning" >Edit</a> |
+    <a asp-controller="inputs" asp-action="Index" asp-route-id="@Model.InputID"  class="btn btn-default">Volver a listado de Entradas</a>
+    @*<a asp-controller="inputs" asp-action="Index"   class="btn btn-default">Volver a listado de Entradas</a>*@
+</div>

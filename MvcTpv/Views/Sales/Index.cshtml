@@ -1,0 +1,277 @@
+﻿@*@model IEnumerable<MvcTpv.Models.Sale>*@
+@model MvcTpv.Models.TpvViewModel.VentasIndexData
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Ventas</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success" >Create New</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]"> Fecha de alta </a>
+                   @*@Html.DisplayNameFor(model => model.Fecha_Hora)*@
+                </th>
+                <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData["TipoCompSortParm"]"> Tipo  Comprobante</a>
+                    @* @Html.DisplayNameFor(model => model.Tipo_Comprobante)
+                   @Html.DisplayNameFor(model => model.Serie_comprobante)
+                   @Html.DisplayNameFor(model => model.Num_comprobante)*@
+                </th>
+                <th>
+                   Comprobante
+                </th>
+                 <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData["CustomerSortParm"]">  Cliente</a>                   
+                    @*@Html.DisplayNameFor(model => model.Customer)*@
+                </th>
+                <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData[" SalemanSortParm"]">  Vendedor</a>
+                    @*@Html.DisplayNameFor(model => model.SaleMan)*@
+                </th>
+                <th> IGIC </th> 
+                 <th>Total Venta</th>
+                <th>Total+IGIC  </th> 
+                <th>
+                   Estado
+                   @*@Html.DisplayNameFor(model => model.Estado)*@
+                </th>
+               
+           <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Sales) {
+
+    string selectedRow = "";
+    if (item.ID == (int?)ViewData["SaleID"])
+    {
+        selectedRow = "success";
+    }
+       <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha_Hora)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo_Comprobante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serie_comprobante)
+               &nbsp; @Html.DisplayFor(modelItem => item.Num_comprobante)
+            </td>
+            <td>
+                @{ var txt_persona = "";}
+               @if (item.Customer != null)
+               {
+                   txt_persona = item.Customer.FirstMidName;
+                   @* @item.Customer.FirstMidName
+                        @Html.DisplayFor(modelItem => item.Customer.FirstMidName)*@
+               }
+               else
+               {
+                   txt_persona = "No se cargó nombre de cliente, clausula include?";
+
+               }
+                @txt_persona
+            </td>
+            <td>
+             
+                @if (item.SaleMan != null)
+                {
+
+                    txt_persona = item.SaleMan.FirstMidName;
+                   @*@item.SaleMan.FirstMidName
+                   @Html.DisplayFor(modelItem => item.SaleMan.FirstMidName)*@
+                }
+                else
+                {
+                    txt_persona = "No se cargó nombre del vendedor, clausula include?";
+
+                }
+                @txt_persona
+
+            </td>
+            <td>
+                @string.Format("{0:n2}", item.Impuesto)
+                @*string.Format("{0:n2}", 200 000 000.8776);
+                @Html.DisplayFor(modelItem => item.Impuesto)
+                *@
+                 
+            </td>
+
+            <td>
+                @{  var total = 0.00m;}
+                
+                @if (item.SaleDetails != null) { 
+               @*  @{*@
+
+
+
+                    foreach (var detalle in item.SaleDetails)
+                    {
+                        total += detalle.TotalParcial;
+                        //item.TotalInput = item.TotalInput + detalle.TotalParcial;
+                    }
+                   @* @string.Format("{0:c2}", total)]*@
+
+                }
+                 @string.Format("{0:c2}", total )
+               @* @Html.DisplayFor(modelItem => item.TotalSale)*@
+            </td>
+            <td>
+                @{
+                     var igic = total * (decimal)item.Impuesto;                 
+                     total = total + igic;
+                     @string.Format("{0:c2}", total )
+                }
+            </td>
+            <td>
+                @if(item.Estado != null ){ @Html.DisplayFor(modelItem => item.Estado)}
+               
+            </td>
+           
+            <td style="width:30%">
+                 <a  asp-action="Index"    asp-route-id="@item.ID" class="btn btn-primary">Select</a> |   |
+                <a asp-action="Edit" asp-route-id="@item.ID"    class="btn btn-warning">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-info">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID"  class="btn btn-danger" >Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@if (Model.SaleDetails != null)
+{
+    <h3>Detalles de la Entrada Seleccionada</h3>
+    //Taught by Selected Instructor
+
+  
+    <table class="table">
+        <tr>
+            <th></th>  
+            <th>Numero de Detalle</th>
+            <th>Nombre de Producto</th>
+            <th>Cantidad</th>
+            <th>PVP del Producto</th>
+            <th>Descuento</th>
+            <th>Total Parcial del Detalle</th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.SaleDetails)
+        {
+            string selectedRow = "";
+            if (item.SaleDetailID == (int?) ViewData["SaleDetailID"] )
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                  <div class="btn btn-default">@Html.ActionLink("Select", "Index", new { SaleDetailID = item.SaleDetailID } )</div> 
+                  
+                </td>
+                <td>
+                    @item.SaleDetailID
+                </td>
+                <td>
+                    @item.Product.ProductName 
+                </td>
+                <td>
+                    @item.Cantidad
+                </td>
+                <td>
+                    
+                    @string.Format("{0:c2}", item.PVP)
+
+                   @* @string.Format("{0:c2}", item.PNETO)
+                    @item.PNETO*@
+                </td>
+                <td>
+                    @string.Format("{0:c2}", item.Descuento)
+                   
+                    @*@item.PVP*@
+                </td>
+                 <th>
+                     @{var total = 0.0m;}
+                     @if( item.PVP>0 && item.Descuento>0 ){
+                          total= item.TotalParcial;
+
+                     }
+                      @string.Format("{0:c2}", total ) 
+                 </th>
+
+                <td style="width:35%">
+                    <a asp-controller="SaleDetails" asp-action="Create" asp-route-id="@item.SaleDetailID" class="btn btn-success"> Añadir Detalle  </a>
+                    <a asp-controller="SaleDetails" asp-action="Edit" asp-route-id="@item.SaleDetailID" class="btn btn-warning">Edit</a> |
+                    <a asp-controller="SaleDetails" asp-action="Details" asp-route-id="@item.SaleDetailID" class="btn btn-info">Details</a> |
+                    <a asp-controller="SaleDetails" asp-action="Delete" asp-route-id="@item.SaleDetailID" class="btn btn-danger">Delete</a>
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+
+@if (Model.Product != null)
+{
+    <h3>
+        Producto Comprado en el Detalle Seleccionado  
+   
+    </h3>
+    //Selected Course
+
+    <table class="table">
+        <tr>
+            <th>Numero de Producto</th>
+            <th>Nombre de producto</th>
+            <th>Descripcion</th>
+            <th>Stock</th>
+            <th></th>
+        </tr>
+       
+            <tr>
+                <td>
+                    @*@Html.DisplayFor(model=>model.Product.ProductID)*@
+                    
+                    @Model.Product.ProductID
+                </td>
+                <td>
+                    @Model.Product.ProductName
+                </td>
+                <td>
+                    @Model.Product.Description
+                </td>
+                <td>
+                    @Model.Product.Stock
+                </td>
+
+            <td>
+               
+                <a asp-controller="Products"  asp-action="Edit"     asp-route-id="@Model.Product.ProductID" class="btn btn-warning">Edit</a> |
+                <a asp-controller="Products"  asp-action="Details"  asp-route-id="@Model.Product.ProductID" class="btn btn-info">Details</a> |
+                <a asp-controller="Products"  asp-action="Delete"   asp-route-id="@Model.Product.ProductID" class="btn btn-danger" >Delete</a>
+             </td>
+
+            </tr>
+       
+    </table>
+}

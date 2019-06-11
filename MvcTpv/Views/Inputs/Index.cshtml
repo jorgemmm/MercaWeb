@@ -1,0 +1,350 @@
+﻿@*@model IEnumerable<MvcTpv.Models.Input>*@
+@model MvcTpv.Models.TpvViewModel.IngresosIndexData
+
+@*@model PaginatedList<MvcTpv.Models.TpvViewModel.IngresosIndexData>*@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Entrada de Artículos y Albaranes</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nueva Entrada de Productos</a>
+</p>
+<p>
+    <a asp-action="Report" class="btn btn-info">Informes sobre Entrada de Productos</a>
+</p>
+<form asp-action="Index" method="get">
+       
+        <div class="form-actions no-color">
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+            <p>
+                Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            
+            </p>
+            </div>
+        </div>
+    
+        <div class="form-actions no-color">
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+                <p>
+                
+                @* Find by name: <input type="date" name="selectedDate" value="@ViewData["currentDateInicioFilter"]" />*@
+                    Find by Fecha: <input type="date" name="selectedFirstDate"  value="@ViewData["currentFirstDate"]" />
+                </p>
+            </div>
+        </div>
+    <div class="form-actions no-color">
+        @*<label asp-for="ProviderID" class="control-label col-md-2"></label>*@
+       
+       
+     
+    
+           
+
+    </div>
+    
+    
+    
+       <div class="form-actions no-color">
+            <div class="col-lg-4 col-sm-4 col-xs-12">
+            <input type="submit" value="Search" class="btn btn-info" /> |
+                <a asp-action="Index" class="btn btn-default">Back to Full List</a>
+
+            </div>
+
+        </div>
+
+
+
+</form>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]"    asp-route-currentFilter="@ViewData["CurrentFilter"]" > Fecha de alta </a>
+                   @* @Html.DisplayNameFor(model => model.Fecha_hora)*@
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["TipoCompSortParm"]"  asp-route-currentFilter="@ViewData["CurrentFilter"]" > Tipo  Comprobante</a>
+                    @*@Html.DisplayNameFor(model => model.Tipo_Comprobante)
+                    @Html.DisplayNameFor(model => model.serie_comprobante)
+                    @Html.DisplayNameFor(model => model.num_comprobante)*@
+                </th>
+                <th>
+                    Comprobante
+                </th>
+            <th>
+                Provider
+                @*@Html.DisplayNameFor(model => model.Provider)*@
+
+            </th>
+                <th>
+                    IGIC 
+                </th>               
+               <th>Total Ingreso</th>
+                <th>
+                    Total+IGIC
+                    @*@Html.DisplayNameFor(model => model.TotalInput)*@
+                </th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Inputs) {
+    string selectedRow = "";
+    if (item.InputID == (int?)ViewData["InputID"])
+    {
+        selectedRow = "success";
+    }
+
+
+
+        <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.InputID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha_hora)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo_Comprobante) 
+               
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.serie_comprobante)
+                &nbsp;@Html.DisplayFor(modelItem => item.num_comprobante)
+            </td>
+            <td>
+                @if (item.Provider != null)
+                {
+                    @item.Provider.FirstMidName
+                    @*@Html.DisplayFor(modelItem => item.Provider.FirstMidName)*@
+                }
+
+            </td>
+            <td>
+               
+                @string.Format("{0:n2}", item.Impuesto)
+                @*string.Format("{0:n2}", 200 000 000.8776);
+                @Html.DisplayFor(modelItem => item.Impuesto)*@
+                 
+                
+            </td>
+            <td>
+                
+                @{  var total = 0.00m;}
+                
+                @if (item.InputDetails != null) { 
+               @*  @{*@
+
+
+
+                    foreach (var detalle in item.InputDetails)
+                    {
+                        total += detalle.TotalParcial;
+                        //item.TotalInput = item.TotalInput + detalle.TotalParcial;
+                    }
+                    @string.Format("{0:c2}", total)
+
+                }
+                @*else { var total = 0.00m; }*@
+
+
+            </td>
+            <td  >
+               @* total = total + (double) detalle.Cantidad *  detalle.PrecioVentaUnitario;*@
+                    @{ 
+                                        @*decimal total=0.0m;
+                        Para optimizar BD eliminar TotalInput en alguna migrations
+                        Y calcular total von esta vble
+
+                    var total=0.00m;
+
+                    foreach (var detalle in item.InputDetails)
+                    {
+                        total += detalle.TotalParcial;
+                        //item.TotalInput = item.TotalInput + detalle.TotalParcial;
+                    }*@
+
+                    var igic = total * item.Impuesto;
+                    total = total + igic;
+
+
+                    @*string.Format("{0:n2}", 200 000 000.8776);
+                    results: 200.000.000,88
+                    string.Format("{0:n3}", 200 000 000.8776);
+                    results: 200.000.000,878
+                    
+                    *@
+
+
+                   @string.Format("{0:c2}", total )
+                    @*@string.Format("{0:c2}", item.TotalInput)*@
+                   
+                        }
+                    
+                      
+                    
+                
+            </td>
+           
+            <td>
+                <a  asp-action="Index"    asp-route-id="@item.InputID" class="btn btn-primary">Select</a> |   |
+                <a asp-action="Edit"     asp-route-id="@item.InputID" class="btn btn-warning">Edit</a> |
+                <a asp-action="Details"  asp-route-id="@item.InputID" class="btn btn-info">Details</a> |
+                <a asp-action="Delete"   asp-route-id="@item.InputID" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@*Paginación
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }*@
+
+
+@{var i = 1;
+    var j = 0;
+    }
+<label> Page: @j </label>
+<a asp-action="Index" 
+   asp-route-sortOrder="@ViewData["CurrentSort"]" 
+   asp-route-page="@(j=i - 1)" 
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default   "
+   >
+    Previous 
+</a>
+
+
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(j=i + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default  ">
+    Next 
+</a>
+
+
+
+
+@if (Model.InputDetails != null)
+{
+    <h3>Detalles de la Entrada Seleccionada</h3>
+    //Taught by Selected Instructor
+
+  
+    <table class="table">
+        <tr>
+            <th></th>  
+            <th>Numero de Detalle</th>
+            <th>Nombre de Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Compra Un</th>
+            <th>Precio  Venta Un</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.InputDetails)
+        {
+            string selectedRow = "";
+            if (item.InputDetailID == (int?) ViewData["InputDetailID"] )
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    <div class="btn btn-default"> @Html.ActionLink("Select", "Index", new { InputDetailID = item.InputDetailID })</div> 
+                </td>
+                <td>
+                    @item.InputDetailID
+                </td>
+                <td>
+                    @item.Product.ProductName 
+                </td>
+                <td>
+                    @item.Cantidad
+                </td>
+                <td>
+                    @string.Format("{0:c2}", item.PNETO)
+                    @*@item.PNETO*@
+                </td>
+                <td>
+                    @string.Format("{0:c2}", item.PVP)
+                    @*@item.PVP*@
+                </td>
+                
+
+              <td>
+                <a asp-controller="InputDetails"  asp-action="Create"    asp-route-id="@item.InputDetailID" class="btn btn-success" > Añadir Detalle  </a>
+                <a asp-controller="InputDetails"  asp-action="Edit"     asp-route-id="@item.InputDetailID" class="btn btn-warning">Edit</a> |
+                <a asp-controller="InputDetails" asp-action="Details"  asp-route-id="@item.InputDetailID" class="btn btn-info">Details</a> |
+                <a asp-controller="InputDetails" asp-action="Delete"   asp-route-id="@item.InputDetailID" class="btn btn-danger">Delete</a>
+             </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+
+@if (Model.Product != null)
+{
+    <h3>
+        Producto Comprado en el Detalle Seleccionado  
+   
+    </h3>
+    //Selected Course
+
+    <table class="table">
+        <tr>
+            <th>Numero de Producto</th>
+            <th>Nombre de producto</th>
+            <th>Descripcion</th>
+            <th>Stock</th>
+            <th></th>
+        </tr>
+       
+            <tr>
+                <td>
+                    @*@Html.DisplayFor(model=>model.Product.ProductID)*@
+                    
+                    @Model.Product.ProductID
+                </td>
+                <td>
+                    @Model.Product.ProductName
+                </td>
+                <td>
+                    @Model.Product.Description
+                </td>
+                <td>
+                    @Model.Product.Stock
+                </td>
+
+            <td>
+               
+                <a asp-controller="Products"  asp-action="Edit"     asp-route-id="@Model.Product.ProductID" class="btn btn-warning">Edit</a> |
+                <a asp-controller="Products"  asp-action="Details"  asp-route-id="@Model.Product.ProductID" class="btn btn-info">Details</a> |
+                <a asp-controller="Products"  asp-action="Delete"   asp-route-id="@Model.Product.ProductID" class="btn btn-danger" >Delete</a>
+             </td>
+
+            </tr>
+       
+    </table>
+}
+
+
+
+
+

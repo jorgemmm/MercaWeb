@@ -1,0 +1,180 @@
+﻿@*@model IEnumerable<MvcTpv.Models.Provider>*@
+@model MvcTpv.Models.TpvViewModel.ProviderIndexData
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Proveedores</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nuevo Proveedor</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Buscar: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index"  class="btn btn-primary">Regresar a la Lista Completa</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+                
+                <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> Nombre de Proveedor</a>
+                  @* @Html.DisplayNameFor(model => model.FirstMidName)
+                    @Html.DisplayNameFor(model => model.LastName)
+                    *@
+                </th>
+                <th>
+                     <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]"> Fecha de alta </a>
+                @*  @Html.DisplayNameFor(model => model.HighDate)*@
+                </th>
+                <th>
+                    Email
+                    @*@Html.DisplayNameFor(model => model.Email)*@
+                </th>
+                <th>
+                    TipoDocumento
+                    @*@Html.DisplayNameFor(model => model.TipoDocumento)*@
+                </th>
+                <th>
+                    NumDocumento
+                    @*@Html.DisplayNameFor(model => model.NumDocumento)*@
+                </th>
+                <th>
+                    Direccion
+                    @*@Html.DisplayNameFor(model => model.Direccion)*@
+                </th>
+                <th>
+                    Telefono
+                    @*@Html.DisplayNameFor(model => model.Telefono)*@
+                </th>
+            <th>
+                Category
+                @*@Html.DisplayNameFor(model => model.Category)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Providers) {
+        string selectedRow = "";
+        if (item.ProviderID == (int?)ViewData["ProviderID"])
+        {
+            selectedRow = "success";
+        }
+       
+       <tr class="@selectedRow">
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstMidName)
+                &nbsp;
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HighDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                <a  asp-action="Index"    asp-route-id="@item.ProviderID"  class="btn btn-primary"   >Select</a> |   |
+               <a asp-action="Edit" asp-route-id="@item.ProviderID" class="btn btn-warning"  >Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProviderID"  class="btn btn-info" >Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProviderID" class="btn btn-danger"  >Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@if (Model.Inputs != null)
+{
+    <h3>Albaranes/Entradas articulos del Proveedor selecionado</h3>
+    //Taught by Selected Instructor
+    <table class="table">
+        <tr>
+            <th>Fecha de Creación</th>
+            <th>Tipo de Comprobante</th>
+            <th>Comprobante</th>
+            <th>IGIC</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Inputs)
+        {
+             @*string selectedRow = "";
+            if (item.ProductID == (int?)ViewData["ProductID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">*@ 
+              <tr>
+                <td>
+                     @*@Html.ActionLink("Select", "Index", new { ProductID = item.ProductID })*@ 
+                     @item.Fecha_hora
+                </td>
+                <td>
+                  @item.Tipo_Comprobante
+                </td>
+                <td>
+                     @item.serie_comprobante &nbsp; @item.num_comprobante
+                   
+                </td>
+                <td>
+                   @item.Impuesto
+                </td>
+                @*<td>
+                    
+                
+                    @item.ImagePath
+                   @string.Format("{0:c2}", item.PVP)
+                </td>*@
+               <td>
+                @{
+                    var total= 0.00m;
+                   foreach (var detalle in item.InputDetails)
+                    {
+                        total += detalle.TotalParcial;
+                        item.TotalInput = item.TotalInput + detalle.TotalParcial; 
+                    }
+                    @string.Format("{0:c2}", item.TotalInput)
+                }
+               
+                
+            </td>
+               
+
+              <td>
+               
+                <a asp-controller="Inputs"  asp-action="Edit"     asp-route-id="@item.InputID" class="btn btn-warning" >Edit</a> |
+                <a asp-controller="Inputs" asp-action="Details"  asp-route-id="@item.InputID" class="btn btn-info" >Details</a> |
+                <a asp-controller="Inputs" asp-action="Delete"   asp-route-id="@item.InputID" class="btn btn-danger" >Delete</a>
+             </td>
+
+            </tr>
+        }
+
+    </table>
+}

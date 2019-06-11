@@ -1,0 +1,109 @@
+﻿@model IEnumerable<MvcTpv.Models.Input>
+@*@model MvcTpv.Models.Input*@
+@{
+    ViewData["Title"] = "Report";
+}
+
+<h2>Report</h2>
+
+<p>
+    @*<a asp-action="Create">Create New</a>*@
+</p>
+<form asp-action="Index" method="get">
+
+    @*<div class="form-actions no-color">
+        <div class="col-lg-4 col-sm-4 col-xs-12">
+            <label>Productos</label>
+            <select asp-items="ViewBag.ProductID" name="selectedProduct"  class="form-control selectpicker" data-live-search="true" ></select>
+        </div>
+    </div>
+    <div class="form-actions no-color">
+        <div class="col-lg-4 col-sm-4 col-xs-12">
+            <p>
+                <label>Providers</label>
+                @*Find by name: <input type="text" name="selectedProvider" value="@ViewData["currentProviderFilter"]" />
+                <select asp-items="ViewBag.ProviderID" name="selectedProvider" class="form-control selectpicker" data-live-search="true"></select>
+
+            </p>
+        </div>
+    </div>*@
+
+    <div class="form-actions no-color">
+        <div class="col-lg-4 col-sm-4 col-xs-12">
+            <p>
+               
+               @* Find by name: <input type="date" name="selectedDate" value="@ViewData["currentDateInicioFilter"]" />*@
+                Find by name: <input type="date" name="selectedDate"  />
+            </p>
+        </div>
+    </div>
+
+        <div class="form-actions no-color">
+            <p>
+
+                <input type="submit" value="Search" class="btn btn-info" /> |
+
+                <a asp-action="Report" class="btn btn-default" >Back to Full List</a>
+            </p>
+        </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fecha_hora)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipo_Comprobante)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.serie_comprobante)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.num_comprobante)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Impuesto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalInput)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Provider)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha_hora)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo_Comprobante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.serie_comprobante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.num_comprobante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Impuesto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalInput)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Provider.FirstMidName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.InputID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.InputID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.InputID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
